@@ -4,7 +4,6 @@ var server = require('http').createServer(app);
 var io = require('socket.io').listen(server);
 users = [];
 connections = [];
-clientIPs = [];
 
 server.listen(process.env.PORT || 3000);
 console.log('server is running....')
@@ -14,16 +13,11 @@ app.get('/', function(req, res){
 
 io.sockets.on('connection', function(socket){
     // connect
-    console.log('Connected: %s sockets connected', connections.length);
     connections.push(socket);
-
+    console.log('Connected: %s sockets connected', connections.length);
     var socketId = socket.id;
     var clientIp = socket.request.connection.remoteAddress;
-    socket.clientIp = socket.request.connection.remoteAddress;
-    clientIPs.push(socket.clientIp+"");
-    console.log("ip address: "+clientIp+" Port: "+ socketId)
-
-    
+    console.log("ip address: "+clie+"Port: "+ address.PORT)
 
     // disconnect
     socket.on('disconnect', function(data){
@@ -31,30 +25,25 @@ io.sockets.on('connection', function(socket){
         users.splice(users.indexOf(socket.username), 1);
         updateUsernames();
         connections.splice(connections.indexOf(socket), 1);
-        console.log('Disconnected: %s sockets disconnected', connections.length);
+        console.log('Disconnected: %s sockets connected', connections.length);
     });
 
     // send messages
     socket.on('send message',function(data){
         console.log(data);
-        io.sockets.emit('new message', {msg: data, user: socket.username, ip: socket.clientIp});
+        io.sockets.emit('new message', {msg: data, user: socket.username});
     });
 
     // new user
     socket.on('new user', function(data, callback){
         callback(true);
         socket.username = data;
-        users.push("username: " + socket.username+ " | ip address" + socket.clientIp);
-        
+        users.push(socket.username);
         updateUsernames();
     });
 
-    
-    
-
     function updateUsernames(){
         io.sockets.emit('get users', users);
-        
         console.log("new user");
     }
 });

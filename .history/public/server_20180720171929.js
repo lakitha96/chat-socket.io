@@ -6,10 +6,10 @@ users = [];
 connections = [];
 clientIPs = [];
 
-server.listen(process.env.PORT || 3000);
+server.listen(process.env.PORT, process.env.IP || "0.0.0.0");
 console.log('server is running....')
 app.get('/', function(req, res){
-    res.sendFile(__dirname + '/index.html');
+    res.sendFile(__dirname + '/home.html');
 });
 
 io.sockets.on('connection', function(socket){

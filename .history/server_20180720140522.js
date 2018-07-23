@@ -44,8 +44,10 @@ io.sockets.on('connection', function(socket){
     socket.on('new user', function(data, callback){
         callback(true);
         socket.username = data;
-        users.push("username: " + socket.username+ " | ip address" + socket.clientIp);
-        
+        users.push(socket.username);
+
+
+
         updateUsernames();
     });
 
@@ -53,7 +55,7 @@ io.sockets.on('connection', function(socket){
     
 
     function updateUsernames(){
-        io.sockets.emit('get users', users);
+        io.sockets.emit('get users', users, clientIPs);
         
         console.log("new user");
     }

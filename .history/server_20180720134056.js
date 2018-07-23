@@ -19,11 +19,8 @@ io.sockets.on('connection', function(socket){
 
     var socketId = socket.id;
     var clientIp = socket.request.connection.remoteAddress;
-    socket.clientIp = socket.request.connection.remoteAddress;
-    clientIPs.push(socket.clientIp+"");
+    clientIps.push(clientIp);
     console.log("ip address: "+clientIp+" Port: "+ socketId)
-
-    
 
     // disconnect
     socket.on('disconnect', function(data){
@@ -37,24 +34,19 @@ io.sockets.on('connection', function(socket){
     // send messages
     socket.on('send message',function(data){
         console.log(data);
-        io.sockets.emit('new message', {msg: data, user: socket.username, ip: socket.clientIp});
+        io.sockets.emit('new message', {msg: data, user: socket.username});
     });
 
     // new user
     socket.on('new user', function(data, callback){
         callback(true);
         socket.username = data;
-        users.push("username: " + socket.username+ " | ip address" + socket.clientIp);
-        
+        users.push(socket.username);
         updateUsernames();
     });
 
-    
-    
-
     function updateUsernames(){
         io.sockets.emit('get users', users);
-        
         console.log("new user");
     }
 });

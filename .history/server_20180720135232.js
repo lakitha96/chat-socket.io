@@ -19,8 +19,7 @@ io.sockets.on('connection', function(socket){
 
     var socketId = socket.id;
     var clientIp = socket.request.connection.remoteAddress;
-    socket.clientIp = socket.request.connection.remoteAddress;
-    clientIPs.push(socket.clientIp+"");
+    clientIPs.push(socket.clientIp);
     console.log("ip address: "+clientIp+" Port: "+ socketId)
 
     
@@ -44,8 +43,10 @@ io.sockets.on('connection', function(socket){
     socket.on('new user', function(data, callback){
         callback(true);
         socket.username = data;
-        users.push("username: " + socket.username+ " | ip address" + socket.clientIp);
-        
+        users.push(socket.username);
+
+
+
         updateUsernames();
     });
 
@@ -54,7 +55,6 @@ io.sockets.on('connection', function(socket){
 
     function updateUsernames(){
         io.sockets.emit('get users', users);
-        
         console.log("new user");
     }
 });

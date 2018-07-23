@@ -45,7 +45,6 @@ io.sockets.on('connection', function(socket){
         callback(true);
         socket.username = data;
         users.push("username: " + socket.username+ " | ip address" + socket.clientIp);
-        
         updateUsernames();
     });
 
